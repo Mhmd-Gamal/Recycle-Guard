@@ -4,7 +4,7 @@ const {chromium}=require('playwright');const fs=require('node:fs');const path=re
  const browser=await chromium.launch({channel:process.env.RG_BROWSER_CHANNEL||'chrome',headless:true});
  const context=await browser.newContext({viewport:{width:1440,height:1080},recordVideo:{dir:output,size:{width:1440,height:1080}}});
  const page=await context.newPage();
- await page.goto('http://127.0.0.1:8765');await page.waitForFunction(()=>document.querySelector('#status').textContent==='Active');
+ await page.goto(process.env.RG_BASE_URL || 'http://127.0.0.1:8765');await page.waitForFunction(()=>document.querySelector('#status').textContent==='Active');
  // Recording-only pacing; verification lives in tests/browser.cjs.
  const pause=ms=>new Promise(r=>setTimeout(r,ms));
  async function caption(text){await page.evaluate(text=>{let el=document.querySelector('#demo-caption');if(!el){el=document.createElement('div');el.id='demo-caption';el.style='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:100;background:#142e26;color:#fff;padding:16px 28px;border-radius:8px;font:600 16px Segoe UI;box-shadow:0 5px 30px #0003;white-space:nowrap;max-width:96vw';document.body.append(el)}el.textContent=text},text);await pause(3500)}

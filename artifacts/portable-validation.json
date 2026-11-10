@@ -1,7 +1,7 @@
 {
   "date": "2026-11-10",
-  "deployment": "Extracted final Windows ZIP; launched RecycleGuard.exe --no-browser",
-  "zip_sha256": "614480a6d1ff63d1a8c2f1b890077abcd8988cf22155284b0a2942be10c31bb5",
+  "deployment": "Extracted redesigned Windows ZIP; RecycleGuard.exe --no-browser --port 8767",
+  "zip_sha256": "3a3d61b9d2388019d08f6ffd5b15d0d42bbee08c64bd4776d7e0cf2064f2ca6b",
   "browser_e2e": {
     "passed": true,
     "checks": [
@@ -23,5 +23,32 @@
   "python_tests_passed": 39,
   "evaluated_source_hashes_match": true,
   "unity_player_tested": false,
-  "real_llm_tested": false
+  "real_llm_tested": false,
+  "ui_ux": {
+    "passed": true,
+    "checks": [
+      "Arrow-key zone selection preserves focus and pressed state",
+      "Inline seed validation and focus",
+      "Manual substitution names the action and target",
+      "Conditional plan disclosure",
+      "Decision trail filters",
+      "Rejection retains incident time",
+      "Replay separates recorded truth from live advice",
+      "Replay has non-drag controls",
+      "Return to live restores adviser",
+      "Persistent dismissible API error",
+      "Policy changes clear obsolete visible advice",
+      "Responsive layout and WCAG automated scan at 375px",
+      "Responsive layout and WCAG automated scan at 768px",
+      "Responsive layout and WCAG automated scan at 1024px",
+      "Responsive layout and WCAG automated scan at 1440px",
+      "Landscape layout",
+      "Reduced motion",
+      "375px CSS viewport reflow (200%-zoom equivalent on a 750px viewport)"
+    ],
+    "axe_version": "4.14.0",
+    "violations": [],
+    "js_errors": [],
+    "note": "Automated checks are not a full accessibility conformance audit."
+  }
 }

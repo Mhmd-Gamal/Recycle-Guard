@@ -2,6 +2,6 @@
   "name": "recycleguard-browser-tests",
   "private": true,
   "version": "1.0.0",
-  "scripts": { "test:e2e": "node tests/browser.cjs", "demo": "node scripts/record-demo.cjs" },
-  "devDependencies": { "playwright": "1.62.1" }
+  "scripts": { "test:e2e": "node tests/browser.cjs", "test:ux": "node tests/ux.cjs", "demo": "node scripts/record-demo.cjs" },
+  "devDependencies": { "playwright": "1.62.1", "axe-core": "4.14.0" }
 }

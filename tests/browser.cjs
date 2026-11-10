@@ -7,7 +7,7 @@ const path = require('node:path');
   const browser=await chromium.launch({channel:process.env.RG_BROWSER_CHANNEL||'chrome',headless:true});
   const context=await browser.newContext({viewport:{width:1440,height:1100},deviceScaleFactor:1});
   const page=await context.newPage(); const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:8765');
+  await page.goto(process.env.RG_BASE_URL || 'http://127.0.0.1:8765');
   await page.waitForFunction(()=>document.querySelector('#status').textContent==='Active');
   await page.screenshot({path:path.join(out,'01-overview.png'),fullPage:true});
   assert.equal(await page.locator('.zone').count(),4);

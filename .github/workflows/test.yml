@@ -25,6 +25,9 @@ jobs:
             try { Invoke-RestMethod http://127.0.0.1:8765/health; break } catch { Start-Sleep -Seconds 1 }
           }
       - run: npm run test:e2e
+      - run: npm run test:ux
+        env:
+          RG_BASE_URL: http://127.0.0.1:8765
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -32,4 +35,5 @@ jobs:
           path: |
             artifacts/test-results.xml
             artifacts/browser
+            artifacts/redesign
             artifacts/ci-evaluation

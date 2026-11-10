@@ -2,6 +2,8 @@
 
 **An inspectable emergency-training research prototype with a shared C# incident model, a Unity client, and an observation-only Python adviser.**
 
+The browser workspace has been redesigned using [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main): dark operational surfaces, evidence hierarchy, keyboard controls, clearer replay and responsive layouts. See [design decisions and UI verification](docs/UI_REDESIGN.md).
+
 ![Browser demonstration of the C# model](artifacts/browser/02-evidence.png)
 
 Fictional setting: Northbank resource recovery facility. The operator must manage escalating heat, evacuate occupants, establish modelled isolation, and allocate limited crews and suppression resource under imperfect telemetry. The operator always decides whether to accept, reject, modify or replace advice.
@@ -87,6 +89,7 @@ npm install
 npx playwright install chrome ffmpeg
 # Start the local service in another terminal, then:
 npm run test:e2e
+npm run test:ux
 npm run demo
 ```
 

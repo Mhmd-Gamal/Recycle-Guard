@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-10",
+  "deployment": "Extracted final Windows ZIP; launched RecycleGuard.exe --no-browser",
+  "zip_sha256": "614480a6d1ff63d1a8c2f1b890077abcd8988cf22155284b0a2942be10c31bb5",
+  "browser_e2e": {
+    "passed": true,
+    "checks": [
+      "initial render",
+      "unknown evidence",
+      "advice",
+      "alternative",
+      "rejection without time advance",
+      "invalid manual action blocked",
+      "complete checked episode",
+      "export",
+      "verified replay",
+      "mobile overflow",
+      "no JS errors"
+    ],
+    "episode_steps": 17,
+    "browser": "157.0.8103.38"
+  },
+  "python_tests_passed": 39,
+  "evaluated_source_hashes_match": true,
+  "unity_player_tested": false,
+  "real_llm_tested": false
+}

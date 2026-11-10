@@ -17,6 +17,7 @@ artifacts/private/
 artifacts/evaluation/
 artifacts/evaluation-v1/
 artifacts/portable-build-location.txt
+artifacts/private-release-path.txt
 artifacts/demo/page@*.webm
 artifacts/report-preview/
 node_modules/

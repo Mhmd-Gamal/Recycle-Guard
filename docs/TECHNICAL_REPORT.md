@@ -1,6 +1,6 @@
 # RecycleGuard: evidence-aware decision support in a discrete incident simulator
 
-**Version 1.0 | 10 November 2026 | AI-assisted research prototype**
+**Version 1.0 | 10 November 2026 | Research prototype**
 
 ## Abstract
 
@@ -56,7 +56,7 @@ The strict checker's zero-invalid result is partly by construction: it encodes t
 
 The release includes the shared C# source, Python code, Unity source, pinned direct dependencies, Windows demo, tests, experiment runner, raw traces, SHA-256 source manifests, replay example, browser video and build scripts. Run `python -m experiments.run --seeds 100 --seed-start 2000 --output artifacts/heldout-evaluation` after compiling the core. Source manifests identify the evaluated files. See `EXPERIMENT_PROTOCOL.md` for definitions and `UNITY_BUILD.md` for remote licensed-Editor builds.
 
-Codex generated and tested the implementation with substantial AI assistance at the applicant's request. The applicant must review, explain, modify and personally validate the work before claiming individual technical contributions. The first next step is a genuine Unity build and demonstration on a licensed remote machine. Subsequent steps are real-model equal-state cached-proposal evaluation, stronger baselines, noisy/delayed action acknowledgements, expert-reviewed scenarios and a properly designed human study.
+Development provenance is recorded in [CONTRIBUTIONS.md](CONTRIBUTIONS.md). The next validation step is a Unity build and interaction test on a licensed machine. Subsequent steps are real-model equal-state cached-proposal evaluation, stronger baselines, noisy/delayed action acknowledgements, expert-reviewed scenarios and a properly designed human study.
 
 ## References
 

@@ -5,7 +5,7 @@ import sys
 
 root=Path(__file__).resolve().parents[1]
 names=['fastapi','uvicorn','starlette','pydantic','pydantic-core','anyio','click','h11','idna','sniffio','typing-extensions','annotated-types','annotated-doc','typing-inspection','websockets','python-dotenv','watchfiles','httptools','pyyaml','opentelemetry-api','importlib-metadata','zipp','packaging','setuptools','pyinstaller','pyinstaller-hooks-contrib','altgraph','pefile','pywin32-ctypes']
-parts=['RECYCLEGUARD THIRD-PARTY NOTICES\n\nThis file collects licenses/notices from installed runtime and build-tool distributions. Build tools are not necessarily included in the executable. Each dependency retains its original license. Project code has no selected redistribution license yet; the applicant should choose one before public release.\n']
+parts=['RECYCLEGUARD THIRD-PARTY NOTICES\n\nThis file collects licenses/notices from installed runtime and build-tool distributions. Build tools are not necessarily included in the executable. Each dependency retains its original license. Project code has no selected redistribution license yet; a project license remains to be selected before public release.\n']
 license_path=Path(sys.base_prefix)/'LICENSE.txt'
 if license_path.exists():parts.append('PYTHON\n'+license_path.read_text(encoding='utf-8',errors='replace'))
 for name in names:

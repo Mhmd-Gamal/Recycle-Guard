@@ -1,4 +1,4 @@
-# Building Unity without installing it on the applicant's laptop
+# Building the Unity client on a remote machine
 
 There is no compiled Unity player in this release. C# compilation and browser testing do not establish Unity runtime compatibility. A licensed Editor must execute somewhere to produce genuine Unity evidence.
 

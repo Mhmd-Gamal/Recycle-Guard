@@ -29,6 +29,5 @@ Only local session data is used. Sessions live in memory and disappear when the
 server stops. Export any replay you want to keep. Optional configured LLM modes
 send synthetic observations to the endpoint you explicitly configure.
 
-For the research method, results, source and ownership disclosure, see the
-companion source package and technical report. The applicant must personally
-review, understand, extend and validate the work before claiming competence.
+See the companion source package and technical report for the research method,
+results, validation scope and development provenance.

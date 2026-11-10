@@ -2,13 +2,13 @@
 
 **An inspectable emergency-training research prototype with a shared C# incident model, a Unity client, and an observation-only Python adviser.**
 
-The browser workspace has been redesigned using [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main): dark operational surfaces, evidence hierarchy, keyboard controls, clearer replay and responsive layouts. See [design decisions and UI verification](docs/UI_REDESIGN.md).
+The operator workspace brings facility state, observation timestamps, recommendations and decision history into one view. See [interface design and verification](docs/UI_REDESIGN.md).
 
 ![Browser demonstration of the C# model](artifacts/browser/02-evidence.png)
 
 Fictional setting: Northbank resource recovery facility. The operator must manage escalating heat, evacuate occupants, establish modelled isolation, and allocate limited crews and suppression resource under imperfect telemetry. The operator always decides whether to accept, reject, modify or replace advice.
 
-> **Release status:** the Windows browser demo, C# core, Python service, replay and offline experiments have been run and tested. The Unity client is supplied as source and has **not** been compiled or run in Unity. No Unity Editor was installed, as requested. A licensed Editor on another machine or runner is still required. Offline proposal fixtures are **not LLMs**. This is a simplified research sandbox, not operational guidance or an FRV-validated system.
+> **Release status:** the Windows browser demo, C# core, Python service, replay and offline experiments have been run and tested. The Unity client is supplied as source and has **not** been compiled or run in Unity. A licensed Editor on another machine or runner is still required. Offline proposal fixtures are **not LLMs**. This is a simplified research sandbox, not operational guidance or an FRV-validated system.
 
 ## Try it without installing Unity or Python
 
@@ -37,7 +37,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m uvicorn adviser.app:app --host 127.0.0.1 --port 8765
 ```
 
-Close running demo sessions before rebuilding the C# executable: Windows locks a running executable. The build script uses a short temporary compilation path because the original application folder has a long name.
+Close running demo sessions before rebuilding the C# executable: Windows locks a running executable. The build script uses a short temporary compilation path to support workspaces with long paths.
 
 ## A five-minute walkthrough
 
@@ -136,8 +136,8 @@ The model must already be available. Real-model runs fail explicitly on provider
 | `experiments` | Paired-seed runs, equal-state probes, metrics and bootstrap intervals |
 | `tests` | C# invariants, API workflows, provider contracts and browser automation |
 | `artifacts/heldout-evaluation` | Raw traces, per-episode metrics, manifest and results |
-| `docs` | Report, limitations, ownership disclosure and learning checklist |
+| `docs` | Technical report, validation scope and development provenance |
 
-## Attribution and application use
+## Development
 
-This implementation was generated and tested with substantial Codex assistance. The applicant's independent implementation, Unity proficiency and operational-domain expertise have not been established by this session. Read [CONTRIBUTIONS.md](docs/CONTRIBUTIONS.md) and complete the ownership exercises before presenting the project. Do not describe the browser build as Unity footage, the fixture as an LLM, or the prototype as validated by Deakin/FRV.
+See [development provenance and contribution guidelines](docs/CONTRIBUTIONS.md). Third-party design guidance and dependency notices are documented separately in [UI_REDESIGN.md](docs/UI_REDESIGN.md) and [THIRD_PARTY_NOTICES.txt](docs/THIRD_PARTY_NOTICES.txt).

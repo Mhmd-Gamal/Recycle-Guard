@@ -1,6 +1,6 @@
 RECYCLEGUARD THIRD-PARTY NOTICES
 
-This file collects licenses/notices from installed runtime and build-tool distributions. Build tools are not necessarily included in the executable. Each dependency retains its original license. Project code has no selected redistribution license yet; the applicant should choose one before public release.
+This file collects licenses/notices from installed runtime and build-tool distributions. Build tools are not necessarily included in the executable. Each dependency retains its original license. Project code has no selected redistribution license yet; a project license remains to be selected before public release.
 
 
 PYTHON

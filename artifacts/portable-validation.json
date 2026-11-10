@@ -50,5 +50,14 @@
     "violations": [],
     "js_errors": [],
     "note": "Automated checks are not a full accessibility conformance audit."
+  },
+  "documentation_refresh": {
+    "date": "2026-11-10",
+    "zip_sha256": "eaf4def8b4c5aac18ea8c21f30442631115874fa1a2b8b5e6cc173257e95b3b9",
+    "changed_entries": [
+      "RecycleGuard/README.txt",
+      "RecycleGuard/THIRD_PARTY_NOTICES.txt"
+    ],
+    "all_other_entries_identical_to_tested_zip": true
   }
 }

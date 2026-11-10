@@ -1,0 +1,35 @@
+name: Shared CSharp and Python validation
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: python -m pip install -r requirements.txt
+      - run: ./scripts/build-core.ps1
+      - run: python -m pytest -q --junitxml=artifacts/test-results.xml
+      - run: python -m experiments.run --seeds 5 --seed-start 9000 --output artifacts/ci-evaluation
+      - run: npm install
+      - run: npx playwright install chrome
+      - name: Start local server
+        shell: pwsh
+        run: |
+          Start-Process -FilePath (Get-Command python).Source -ArgumentList '-m','uvicorn','adviser.app:app','--host','127.0.0.1','--port','8765' -WindowStyle Hidden
+          for ($i=0; $i -lt 30; $i++) {
+            try { Invoke-RestMethod http://127.0.0.1:8765/health; break } catch { Start-Sleep -Seconds 1 }
+          }
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-evidence
+          path: |
+            artifacts/test-results.xml
+            artifacts/browser
+            artifacts/ci-evaluation

@@ -1,0 +1,153 @@
+{
+  "groups": [
+    {
+      "scenario": "reliable",
+      "mode": "scripted",
+      "episodes": 100,
+      "attempted_invalid_pct": 0.0,
+      "contained_pct": 100,
+      "mean_damage": 0.05,
+      "mean_steps": 7,
+      "median_policy_latency_ms": 0.1073
+    },
+    {
+      "scenario": "reliable",
+      "mode": "offline_raw",
+      "episodes": 100,
+      "attempted_invalid_pct": 25.268817204301076,
+      "contained_pct": 100,
+      "mean_damage": 0,
+      "mean_steps": 9.3,
+      "median_policy_latency_ms": 0.115675
+    },
+    {
+      "scenario": "reliable",
+      "mode": "offline_checked_permissive",
+      "episodes": 100,
+      "attempted_invalid_pct": 0.0,
+      "contained_pct": 100,
+      "mean_damage": 0,
+      "mean_steps": 6.57,
+      "median_policy_latency_ms": 0.1168
+    },
+    {
+      "scenario": "reliable",
+      "mode": "offline_checked",
+      "episodes": 100,
+      "attempted_invalid_pct": 0.0,
+      "contained_pct": 100,
+      "mean_damage": 0,
+      "mean_steps": 6.57,
+      "median_policy_latency_ms": 0.12075
+    },
+    {
+      "scenario": "delayed",
+      "mode": "scripted",
+      "episodes": 100,
+      "attempted_invalid_pct": 95.38319482917821,
+      "contained_pct": 0,
+      "mean_damage": 48.83,
+      "mean_steps": 21.66,
+      "median_policy_latency_ms": 0.221575
+    },
+    {
+      "scenario": "delayed",
+      "mode": "offline_raw",
+      "episodes": 100,
+      "attempted_invalid_pct": 70.83333333333333,
+      "contained_pct": 0,
+      "mean_damage": 19.18,
+      "mean_steps": 28.08,
+      "median_policy_latency_ms": 0.23707499999999998
+    },
+    {
+      "scenario": "delayed",
+      "mode": "offline_checked_permissive",
+      "episodes": 100,
+      "attempted_invalid_pct": 6.702412868632708,
+      "contained_pct": 100,
+      "mean_damage": 0.01,
+      "mean_steps": 14.92,
+      "median_policy_latency_ms": 0.24257499999999999
+    },
+    {
+      "scenario": "delayed",
+      "mode": "offline_checked",
+      "episodes": 100,
+      "attempted_invalid_pct": 0.0,
+      "contained_pct": 100,
+      "mean_damage": 0,
+      "mean_steps": 14.31,
+      "median_policy_latency_ms": 0.25082499999999996
+    },
+    {
+      "scenario": "dropout",
+      "mode": "scripted",
+      "episodes": 100,
+      "attempted_invalid_pct": 30.232558139534884,
+      "contained_pct": 100,
+      "mean_damage": 5.01,
+      "mean_steps": 17.2,
+      "median_policy_latency_ms": 0.220025
+    },
+    {
+      "scenario": "dropout",
+      "mode": "offline_raw",
+      "episodes": 100,
+      "attempted_invalid_pct": 43.02325581395349,
+      "contained_pct": 91.0,
+      "mean_damage": 4.01,
+      "mean_steps": 17.2,
+      "median_policy_latency_ms": 0.23595
+    },
+    {
+      "scenario": "dropout",
+      "mode": "offline_checked_permissive",
+      "episodes": 100,
+      "attempted_invalid_pct": 24.953271028037385,
+      "contained_pct": 100,
+      "mean_damage": 0.57,
+      "mean_steps": 10.7,
+      "median_policy_latency_ms": 0.24045
+    },
+    {
+      "scenario": "dropout",
+      "mode": "offline_checked",
+      "episodes": 100,
+      "attempted_invalid_pct": 0.0,
+      "contained_pct": 100,
+      "mean_damage": 0,
+      "mean_steps": 15.62,
+      "median_policy_latency_ms": 0.24217499999999997
+    }
+  ],
+  "paired_episode_differences": [
+    {
+      "scenario": "reliable",
+      "checked_minus_raw_invalid_rate_pp": -24.43080808080808,
+      "bootstrap_95_ci_pp": [
+        -26.102200577200577,
+        -22.85689033189033
+      ]
+    },
+    {
+      "scenario": "delayed",
+      "checked_minus_raw_invalid_rate_pp": -71.40479339003653,
+      "bootstrap_95_ci_pp": [
+        -72.27658848069889,
+        -70.6047230644599
+      ]
+    },
+    {
+      "scenario": "dropout",
+      "checked_minus_raw_invalid_rate_pp": -40.41094262364877,
+      "bootstrap_95_ci_pp": [
+        -42.36776877656188,
+        -38.21268520272831
+      ]
+    }
+  ],
+  "equal_state_probe_count": 5458,
+  "raw_invalid_probes": 2964,
+  "checked_invalid_probes": 0
+}

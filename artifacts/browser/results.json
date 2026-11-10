@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "initial render",
+    "unknown evidence",
+    "advice",
+    "alternative",
+    "rejection without time advance",
+    "invalid manual action blocked",
+    "complete checked episode",
+    "export",
+    "verified replay",
+    "mobile overflow",
+    "no JS errors"
+  ],
+  "episode_steps": 17,
+  "browser": "157.0.8103.38"
+}

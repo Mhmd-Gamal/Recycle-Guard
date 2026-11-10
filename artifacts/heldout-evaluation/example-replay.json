@@ -1,0 +1,721 @@
+{
+  "schema": "recycleguard.replay.v1",
+  "seed": 2000,
+  "scenario": "dropout",
+  "events": [
+    {
+      "tick": 0,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: POWER: confirmed isolation required. Prioritise confirmed occupants using an available crew.",
+      "action": {
+        "kind": "evacuate",
+        "zone": 0,
+        "revision": 0
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 1,
+        "water": 18,
+        "crews": 1,
+        "damage": 0,
+        "evacuated": 1,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 53,
+            "people": 0,
+            "isolated": 0,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 8,
+            "people": 4,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 11,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 9,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 1,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: CURRENT_EVIDENCE: operational action requires age 0; inspect first. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 0,
+        "revision": 1
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 2,
+        "water": 18,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 1,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 56,
+            "people": 0,
+            "isolated": 0,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 7,
+            "people": 4,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 10,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 8,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 2,
+      "decision": "offline_checked",
+      "note": "Remove the modelled power contribution to heat growth.",
+      "action": {
+        "kind": "isolate",
+        "zone": 0,
+        "revision": 2
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 3,
+        "water": 18,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 1,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 57,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 6,
+            "people": 4,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 9,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 7,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 3,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: EVIDENCE: inspect missing/stale zone first. Reduce modelled heat after checking isolation, occupancy and resources.",
+      "action": {
+        "kind": "suppress",
+        "zone": 0,
+        "revision": 3
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 4,
+        "water": 16,
+        "crews": 1,
+        "damage": 0,
+        "evacuated": 1,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 18,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 5,
+            "people": 4,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 8,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 6,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 4,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: CURRENT_EVIDENCE: operational action requires age 0; inspect first. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 1,
+        "revision": 4
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 5,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 1,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 17,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 4,
+            "people": 4,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 7,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 5,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 5,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: POWER: confirmed isolation required. Prioritise confirmed occupants using an available crew.",
+      "action": {
+        "kind": "evacuate",
+        "zone": 1,
+        "revision": 5
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 6,
+        "water": 16,
+        "crews": 1,
+        "damage": 0,
+        "evacuated": 5,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 16,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 3,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 6,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 4,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 6,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: POWER: isolation not required or unknown. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 0,
+        "revision": 6
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 7,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 5,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 15,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 2,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 5,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 3,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 7,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: CURRENT_EVIDENCE: operational action requires age 0; inspect first. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 2,
+        "revision": 7
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 8,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 5,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 14,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 1,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 4,
+            "people": 3,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 2,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 8,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: PEOPLE: no confirmed occupants. Prioritise confirmed occupants using an available crew.",
+      "action": {
+        "kind": "evacuate",
+        "zone": 2,
+        "revision": 8
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 9,
+        "water": 16,
+        "crews": 1,
+        "damage": 0,
+        "evacuated": 8,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 13,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 3,
+            "people": 0,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 1,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 9,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: CURRENT_EVIDENCE: operational action requires age 0; inspect first. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 1,
+        "revision": 9
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 10,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 8,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 12,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 2,
+            "people": 0,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 0,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 10,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: HEAT: no confirmed actionable heat. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 0,
+        "revision": 10
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 11,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 8,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 11,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 1,
+            "people": 0,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 0,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 11,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: POWER: isolation not required or unknown. Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 2,
+        "revision": 11
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 12,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 8,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 10,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 0,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 12,
+      "decision": "offline_checked",
+      "note": "Acquire current evidence before committing resources.",
+      "action": {
+        "kind": "inspect",
+        "zone": 3,
+        "revision": 12
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 13,
+        "water": 16,
+        "crews": 2,
+        "damage": 0,
+        "evacuated": 8,
+        "invalidActions": 0,
+        "status": "active",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 9,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 0,
+            "people": 4,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    },
+    {
+      "tick": 13,
+      "decision": "offline_checked",
+      "note": "Proposal replaced: PEOPLE: no confirmed occupants. Prioritise confirmed occupants using an available crew.",
+      "action": {
+        "kind": "evacuate",
+        "zone": 3,
+        "revision": 13
+      },
+      "accepted": true,
+      "reason": "Applied",
+      "after": {
+        "tick": 14,
+        "water": 16,
+        "crews": 1,
+        "damage": 0,
+        "evacuated": 12,
+        "invalidActions": 0,
+        "status": "contained",
+        "zones": [
+          {
+            "id": 0,
+            "heat": 8,
+            "people": 0,
+            "isolated": 1,
+            "name": "Battery intake"
+          },
+          {
+            "id": 1,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Sorting hall"
+          },
+          {
+            "id": 2,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Materials store"
+          },
+          {
+            "id": 3,
+            "heat": 0,
+            "people": 0,
+            "isolated": 0,
+            "name": "Loading yard"
+          }
+        ]
+      }
+    }
+  ]
+}

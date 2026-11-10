@@ -1,0 +1,32 @@
+name: Unity build on an already licensed remote runner
+on: workflow_dispatch
+jobs:
+  unity:
+    runs-on: [self-hosted, Windows, X64, unity6]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with activated Editor
+        shell: pwsh
+        run: |
+          if (!$env:UNITY_EDITOR) { throw 'Set UNITY_EDITOR on this already licensed runner.' }
+          ./scripts/build-unity.ps1 -UnityEditor $env:UNITY_EDITOR
+      - name: Player smoke check
+        shell: pwsh
+        run: |
+          $player = Join-Path $PWD 'dist\UnityWindows\RecycleGuard.exe'
+          $started = Get-Date
+          $run = Start-Process -FilePath $player -ArgumentList '-rgSmoke','-logFile','unity-player-smoke.log' -WindowStyle Hidden -PassThru
+          if (!$run.WaitForExit(60000)) { Stop-Process -Id $run.Id; throw 'Player smoke check timed out' }
+          if ($run.ExitCode -ne 0) { throw 'Player smoke check failed' }
+          $evidence = Join-Path $env:USERPROFILE 'AppData\LocalLow\RecycleGuard Research\RecycleGuard\unity-smoke.json'
+          if (!(Test-Path -LiteralPath $evidence)) { throw 'Smoke evidence missing' }
+          if ((Get-Item -LiteralPath $evidence).LastWriteTime -lt $started) { throw 'Stale smoke evidence' }
+          if (!(Get-Content -LiteralPath $evidence -Raw | ConvertFrom-Json).passed) { throw 'Smoke evidence did not pass' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-build-and-logs
+          path: |
+            dist/UnityWindows
+            unity-build.log
+            unity-player-smoke.log

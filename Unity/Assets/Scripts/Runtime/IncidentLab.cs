@@ -59,10 +59,10 @@ public class IncidentLab : MonoBehaviour
     private readonly Material[] zoneMaterials = new Material[4];
     private Camera view;
     private Font labelFont;
-    private GUIStyle title, heading, body, small, tiny, tinyOk, tinyBlocked, cardTitle, badge, button, segment, field;
+    private GUIStyle title, heading, body, small, tiny, tinyOk, tinyBlocked, cardTitle, badge, captionStyle, button, segment, field;
     private Vector2 trailScroll, adviceScroll;
     private int generation;
-    private string evidenceDir;
+    private string evidenceDir, caption = "";
     private string ReplayPath { get { return Path.Combine(Application.persistentDataPath, "last-session.json"); } }
 
     private static string Argument(string[] args, string name)
@@ -86,20 +86,29 @@ public class IncidentLab : MonoBehaviour
         if (string.IsNullOrEmpty(evidenceDir)) evidenceDir = Application.persistentDataPath;
         BuildFacility(); ResetIncident();
         if (Array.IndexOf(args, "-rgSmoke") >= 0) StartCoroutine(Smoke());
+        else if (Array.IndexOf(args, "-rgDemo") >= 0) StartCoroutine(Demo());
     }
-    // Tint the primitive's own default material. Shaders that no asset references are stripped
-    // from a player build, so a shader is only looked up by name if that default is absent.
+    // Scene surfaces copy a material asset that BuildProject.Prepare creates under Assets/Resources.
+    // A shader that no asset references is stripped from a player build: the first Unity build
+    // rendered every primitive magenta because the default primitive material had lost its shader.
+    private static Material surface;
+    private static bool Renders(Material material)
+    {
+        return material != null && material.shader != null && material.shader.isSupported && material.shader.name.IndexOf("InternalErrorShader", StringComparison.Ordinal) < 0;
+    }
     private static Material Paint(GameObject obj, Color color)
     {
         var target = obj.GetComponent<Renderer>();
-        Material material = target.sharedMaterial == null ? null : target.material;
-        if (material == null)
+        if (surface == null) surface = Resources.Load<Material>("RecycleGuardSurface");
+        Material material = surface != null ? new Material(surface) : target.sharedMaterial == null ? null : target.material;
+        if (!Renders(material))
         {
-            Shader shader = Shader.Find("Legacy Shaders/Diffuse");
-            if (shader == null) shader = Shader.Find("Sprites/Default");
-            if (shader == null) throw new InvalidOperationException("No built-in shader is available for scene primitives");
-            material = new Material(shader); target.material = material;
+            Shader shader = Shader.Find("Standard");
+            if (shader == null) shader = Shader.Find("Legacy Shaders/Diffuse");
+            if (shader == null) throw new InvalidOperationException("No lit shader is available for scene surfaces. Run RecycleGuard > Create and open incident scene.");
+            material = new Material(shader);
         }
+        target.material = material; material = target.material;
         material.color = color; return material;
     }
     private GameObject Cube(string name, Vector3 position, Vector3 size, Color color)
@@ -111,7 +120,8 @@ public class IncidentLab : MonoBehaviour
     private TextMesh Text(string text, Vector3 position, float size)
     {
         var go = new GameObject("Label"); go.transform.position = position;
-        go.transform.rotation = Quaternion.Euler(70, 0, 0);
+        // Face the camera squarely so the text is not foreshortened.
+        go.transform.rotation = view.transform.rotation;
         var t = go.AddComponent<TextMesh>(); t.text = text; t.fontSize = 48; t.characterSize = size;
         t.anchor = TextAnchor.MiddleCenter; t.alignment = TextAlignment.Center; t.color = new Color(.15f, .25f, .22f);
         // A TextMesh created from code needs its font material assigned explicitly to render in a player.
@@ -133,8 +143,8 @@ public class IncidentLab : MonoBehaviour
         view.clearFlags = CameraClearFlags.SolidColor;
         view.rect = new Rect(ViewLeft, ViewBottom, ViewRight - ViewLeft, ViewTop - ViewBottom);
         var light = new GameObject("Daylight").AddComponent<Light>(); light.type = LightType.Directional;
-        light.transform.rotation = Quaternion.Euler(55, -25, 0); light.intensity = 1.2f;
-        RenderSettings.ambientLight = new Color(.65f, .7f, .68f);
+        light.transform.rotation = Quaternion.Euler(55, -25, 0); light.intensity = .85f;
+        RenderSettings.ambientLight = new Color(.45f, .48f, .46f);
         Cube("Facility pad", new Vector3(0, -.3f, 0), new Vector3(26, .4f, 21), new Color(.7f, .77f, .71f));
         Cube("Service lane", new Vector3(0, -.04f, 0), new Vector3(26, .1f, 2), new Color(.35f, .42f, .38f));
         Cube("Central lane", new Vector3(0, -.03f, 0), new Vector3(2, .1f, 21), new Color(.35f, .42f, .38f));
@@ -150,14 +160,14 @@ public class IncidentLab : MonoBehaviour
             {
                 Cube("Material stack " + i + "-" + j, new Vector3(x - 2.7f + (j % 3) * 2, .8f, z + (j < 3 ? 1.8f : 0)), new Vector3(1.2f, 1.2f, 1.1f), new Color(.38f + .03f * j, .48f + .02f * j, .43f));
             }
-            Cube("Conveyor " + i, new Vector3(x, .6f, z - 1.5f), new Vector3(6, .3f, .65f), new Color(.2f, .27f, .24f));
+            Cube("Conveyor " + i, new Vector3(x, .6f, z - 1f), new Vector3(6, .3f, .65f), new Color(.2f, .27f, .24f));
             hazards[i] = GameObject.CreatePrimitive(PrimitiveType.Sphere); hazards[i].name = "Observed heat marker " + i;
             hazards[i].transform.position = new Vector3(x + 2, 2, z + 1);
             Paint(hazards[i], new Color(.95f, .4f, .15f));
             Destroy(hazards[i].GetComponent<Collider>());
-            labels[i] = Text("", new Vector3(x, .6f, z - 3.1f), .07f);
+            labels[i] = Text("", new Vector3(x, .2f, z - 2.8f), .14f);
         }
-        Text("NORTHBANK / RESOURCE RECOVERY", new Vector3(0, 0, 10), .085f);
+        Text("NORTHBANK / RESOURCE RECOVERY", new Vector3(0, 0, 11.6f), .17f);
         Cube("Command vehicle", new Vector3(-10, .5f, -9), new Vector3(2.5f, 1, 1.2f), new Color(.1f, .37f, .3f));
     }
     private void ResetIncident()
@@ -258,7 +268,8 @@ public class IncidentLab : MonoBehaviour
         badge = new GUIStyle(GUI.skin.label) { fontSize = 11, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
         button = new GUIStyle(GUI.skin.button) { fontSize = 14, wordWrap = true, padding = new RectOffset(12, 12, 8, 8) };
         segment = new GUIStyle(GUI.skin.button) { fontSize = 13 };
-        field = new GUIStyle(GUI.skin.textField) { fontSize = 16 };
+        captionStyle = new GUIStyle(GUI.skin.label) { fontSize = 17, wordWrap = true, alignment = TextAnchor.MiddleLeft, normal = { textColor = Color.white } };
+        field = new GUIStyle(GUI.skin.textField) { fontSize = 16, normal = { textColor = Color.white }, focused = { textColor = Color.white }, hover = { textColor = Color.white } };
     }
     private void Box(Rect rect, Color color) { var before = GUI.color; GUI.color = color; GUI.DrawTexture(rect, Texture2D.whiteTexture); GUI.color = before; }
     private static Color FreshnessColor(string freshness)
@@ -375,6 +386,69 @@ public class IncidentLab : MonoBehaviour
             for (int i = trail.Count - 1; i >= 0; i--) GUILayout.Label(trail[i], small);
             GUILayout.EndScrollView(); GUILayout.EndArea();
         }
+        if (caption.Length > 0)
+        {
+            Box(new Rect(270, 596, 756, 90), new Color(.07f, .15f, .12f, .94f));
+            GUI.Label(new Rect(288, 600, 720, 82), caption, captionStyle);
+        }
+    }
+    // -rgDemo: a paced, captioned walkthrough for recording. It calls the same methods as the
+    // buttons, so the simulation, validator and adviser calls are real; only the clicking is scripted.
+    private IEnumerator Demo()
+    {
+        scenarioIndex = 0; seedText = "42"; ResetIncident();
+        caption = "RecycleGuard Unity player: scripted walkthrough. The C# simulation is deterministic and advances one tick only when the operator applies an action.";
+        yield return new WaitForSeconds(7f);
+        caption = "Scenario control: three telemetry models. In the delayed model, readings arrive 3 ticks late.";
+        scenarioIndex = 1; yield return new WaitForSeconds(5f);
+        ResetIncident();
+        caption = "New incident, seed 42, delayed telemetry. The header shows the running incident. At T+0 every reading is current.";
+        yield return new WaitForSeconds(6f);
+        caption = "Observation-timestamp panel: each card shows what was observed, at which tick, how old it is and its source. Waiting three ticks ages every reading.";
+        for (int i = 0; i < 3; i++) { yield return new WaitForSeconds(2.5f); Apply(new ActionCommand("wait", -1, observation.revision), "manual"); }
+        yield return new WaitForSeconds(4f);
+        selected = 0; Refresh();
+        caption = "Readings are now 3 ticks old: STALE. The line under each action is an evidence preflight. It warns that evacuate would be blocked. The operator may still try.";
+        yield return new WaitForSeconds(8f);
+        Apply(new ActionCommand("evacuate", 0, observation.revision), "manual");
+        caption = "Blocked by the C# validator, not by the interface. An invalid decision costs a tick and spends no crew or water.";
+        yield return new WaitForSeconds(7f);
+        Apply(new ActionCommand("inspect", 0, observation.revision), "manual");
+        caption = "Inspect sends reconnaissance. Battery intake is CURRENT again for three ticks; the other zones stay stale.";
+        yield return new WaitForSeconds(7f);
+        caption = "Request advice. The Python adviser receives exactly this observation, with its timestamps. It never sees the true state.";
+        yield return new WaitForSeconds(4f);
+        modeIndex = 0; yield return StartCoroutine(RequestAdvice(false));
+        if (advice == null) { caption = "The adviser service is not running. The message says so, and manual simulation remains available."; yield return new WaitForSeconds(7f); }
+        else
+        {
+            caption = "Limitation: this recommendation comes from a deterministic offline fixture plus a constraint check. It is not an LLM, and nothing executes until the operator accepts.";
+            yield return new WaitForSeconds(9f);
+            Apply(advice.recommendation, "accept");
+            caption = "Accepted. The C# simulation revalidated the action against the real state before applying it.";
+            yield return new WaitForSeconds(6f);
+            modeIndex = 1; yield return StartCoroutine(RequestAdvice(false));
+            if (advice != null)
+            {
+                caption = "Unchecked mode (offline_raw) skips the constraint check, so the fixture can propose actions the evidence does not support. Accepting it anyway...";
+                yield return new WaitForSeconds(8f);
+                Apply(advice.recommendation, "accept");
+                caption = "Result: \"" + message + "\". Whatever the adviser proposes, the simulation has the final say.";
+                yield return new WaitForSeconds(8f);
+            }
+        }
+        scenarioIndex = 2; ResetIncident(); selected = 2;
+        for (int i = 0; i < 3; i++) Apply(new ActionCommand("wait", -1, observation.revision), "manual");
+        caption = "Dropout telemetry: zones lose their readings in rotation. A missing reading shows as ? and NO DATA. It is never shown as zero.";
+        yield return new WaitForSeconds(8f);
+        Export(); LoadReplay();
+        caption = "Replay: the log is re-run through the simulation and every state compared before debrief. Debrief shows recorded truth, which the adviser never saw.";
+        yield return new WaitForSeconds(5f);
+        for (int i = 1; replayMode && i < replay.events.Count; i++) { replayIndex = i; Refresh(); yield return new WaitForSeconds(1.8f); }
+        yield return new WaitForSeconds(3f);
+        caption = "Limits: fictional training rules, not fire science. Offline fixtures, not an LLM. No expert review, no human study, not operational guidance.";
+        yield return new WaitForSeconds(9f);
+        Application.Quit(0);
     }
     // One scenario of the automated player check. Returns an error description, or "" when it passes.
     // tests/test_observation_timeline.py asserts the same sequence against the headless C# host.
@@ -389,6 +463,8 @@ public class IncidentLab : MonoBehaviour
             for (int tick = 1; tick < 3; tick++) sim.Step(new ActionCommand("wait", -1, tick), "test", "Advance telemetry age");
             Simulation.Replay(sim.Log); Refresh();
             if (observation.status != "active" || observation.tick != 3) return name + ": unexpected incident state";
+            for (int i = 0; i < zoneMaterials.Length; i++) if (!Renders(zoneMaterials[i])) return name + ": zone " + i + " has no working shader (it would render magenta)";
+            if (labelFont == null || !Renders(labels[0].GetComponent<Renderer>().sharedMaterial)) return name + ": zone labels have no working font material";
             for (int i = 0; i < evidenceRows.Length; i++)
             {
                 var row = evidenceRows[i];
@@ -406,7 +482,7 @@ public class IncidentLab : MonoBehaviour
     }
     private IEnumerator Smoke()
     {
-        var evidence = new SmokeEvidence { scope = "scene startup, unsafe action rejection, replay, observation-timestamp panel in three telemetry scenarios, one screenshot per scenario", unityVersion = Application.unityVersion, platform = Application.platform.ToString(), graphicsDevice = SystemInfo.graphicsDeviceName, graphicsApi = SystemInfo.graphicsDeviceType.ToString() };
+        var evidence = new SmokeEvidence { scope = "scene startup, working surface and label shaders, unsafe action rejection, replay, observation-timestamp panel in three telemetry scenarios, one screenshot per scenario", unityVersion = Application.unityVersion, platform = Application.platform.ToString(), graphicsDevice = SystemInfo.graphicsDeviceName, graphicsApi = SystemInfo.graphicsDeviceType.ToString() };
         var shots = new List<string>(); var seen = new List<string>(); string error = "";
         try { Directory.CreateDirectory(evidenceDir); } catch (Exception e) { error = "Evidence directory: " + e.Message; }
         yield return new WaitForEndOfFrame();

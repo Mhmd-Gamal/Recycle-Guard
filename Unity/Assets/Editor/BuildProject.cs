@@ -8,9 +8,21 @@ using RecycleGuard;
 
 public static class BuildProject
 {
+    private const string SurfacePath = "Assets/Resources/RecycleGuardSurface.mat";
     [MenuItem("RecycleGuard/Create and open incident scene")]
     public static void Prepare()
     {
+        // The scene is built from code, so no asset would otherwise reference a lit shader and the
+        // player build would strip it. This material asset keeps the shader in the build.
+        Directory.CreateDirectory("Assets/Resources");
+        Shader lit = Shader.Find("Standard");
+        if (lit == null) lit = Shader.Find("Legacy Shaders/Diffuse");
+        if (lit == null) throw new Exception("No lit built-in shader found for scene surfaces");
+        var surface = AssetDatabase.LoadAssetAtPath<Material>(SurfacePath);
+        if (surface == null) { surface = new Material(lit); AssetDatabase.CreateAsset(surface, SurfacePath); }
+        surface.shader = lit; surface.color = Color.white;
+        if (surface.HasProperty("_Glossiness")) surface.SetFloat("_Glossiness", .1f);
+        EditorUtility.SetDirty(surface);
         Directory.CreateDirectory("Assets/Scenes");
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         new GameObject("RecycleGuard incident lab").AddComponent<IncidentLab>();

@@ -1,0 +1,117 @@
+name: Unity build and player smoke test
+# Builds the Windows player in a GameCI container on a GitHub-hosted runner, using the
+# repository owner's own Unity licence from repository secrets, then runs the built player
+# on a Windows runner. Setup: docs/UNITY_BUILD.md. Nothing here bypasses Unity activation.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'Unity/**'
+      - '.github/workflows/unity-gameci.yml'
+permissions:
+  contents: read
+concurrency:
+  group: unity-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Build Windows player (licensed Unity container)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check Unity licence secrets
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          missing=""
+          [ -n "$UNITY_LICENSE" ] || missing="$missing UNITY_LICENSE"
+          [ -n "$UNITY_EMAIL" ] || missing="$missing UNITY_EMAIL"
+          [ -n "$UNITY_PASSWORD" ] || missing="$missing UNITY_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing. See docs/UNITY_BUILD.md."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: Unity/Library
+          key: unity-library-windows-${{ hashFiles('Unity/Assets/**', 'Unity/Packages/**', 'Unity/ProjectSettings/**') }}
+          restore-keys: unity-library-windows-
+      # BuildProject.BuildWindows creates the scene, runs the C# core and timestamp-panel
+      # checks inside the Editor, then builds the player to the path GameCI passes in.
+      - name: Build with GameCI
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: Unity
+          unityVersion: auto
+          targetPlatform: StandaloneWindows64
+          buildName: RecycleGuard
+          buildMethod: BuildProject.BuildWindows
+          versioning: None
+          allowDirtyBuild: true
+      - name: Record build facts
+        if: always()
+        run: |
+          {
+            echo "### Unity build"
+            echo "- Editor version: $(sed -n 's/^m_EditorVersion: //p' Unity/ProjectSettings/ProjectVersion.txt)"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Player files:"
+            ls -1 build/StandaloneWindows64 2>/dev/null | sed 's/^/  - /' || true
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unity-windows-player
+          path: build/StandaloneWindows64
+          if-no-files-found: error
+  smoke:
+    name: Run the built player (-rgSmoke)
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: unity-windows-player
+          path: player
+      # Hosted runners have no GPU, so the player renders with the WARP software rasteriser.
+      # The evidence file records the graphics device that was actually used.
+      - name: Player smoke check
+        shell: pwsh
+        run: |
+          $player = Join-Path $PWD 'player\RecycleGuard.exe'
+          if (!(Test-Path -LiteralPath $player)) { throw 'RecycleGuard.exe is missing from the build artifact' }
+          $evidence = Join-Path $PWD 'unity-evidence'
+          New-Item -ItemType Directory -Force -Path $evidence | Out-Null
+          $log = Join-Path $evidence 'unity-player.log'
+          $arguments = @('-rgSmoke', '-rgEvidenceDir', $evidence, '-screen-fullscreen', '0', '-screen-width', '1600', '-screen-height', '900', '-force-driver-type-warp', '-logFile', $log)
+          $run = Start-Process -FilePath $player -ArgumentList $arguments -PassThru
+          $null = $run.Handle
+          if (!$run.WaitForExit(240000)) { Stop-Process -Id $run.Id -Force; throw 'Player smoke check timed out' }
+          $result = Join-Path $evidence 'unity-smoke.json'
+          if (!(Test-Path -LiteralPath $result)) { throw 'Smoke evidence missing' }
+          $smoke = Get-Content -LiteralPath $result -Raw | ConvertFrom-Json
+          $summary = @(
+            '### Unity player smoke check',
+            "- Passed: $($smoke.passed)",
+            "- Unity version: $($smoke.unityVersion)",
+            "- Platform: $($smoke.platform)",
+            "- Graphics device: $($smoke.graphicsDevice) ($($smoke.graphicsApi))",
+            "- Window: $($smoke.screenWidth) x $($smoke.screenHeight)",
+            "- Screenshots: $($smoke.screenshots -join ', ')",
+            '- Observation-timestamp rows at T+3, seed 42:'
+          ) + ($smoke.freshness | ForEach-Object { "  - $_" })
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          if ($run.ExitCode -ne 0 -or !$smoke.passed) { throw "Player smoke check failed: $($smoke.error)" }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unity-smoke-evidence
+          path: unity-evidence

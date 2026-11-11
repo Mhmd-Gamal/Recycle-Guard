@@ -6,7 +6,7 @@ using RecycleGuard;
 public class Request
 {
     public string op = "observe", scenario = "reliable", decision = "experiment", note = "";
-    public int seed = 42;
+    public int seed = 42, zone;
     public ActionCommand action;
     public SessionLog log;
 }
@@ -33,6 +33,9 @@ public class Program
                     case "log": result = sim.Log; break;
                     case "record": sim.RecordDecision(request.decision, request.note); result = sim.Observe(); break;
                     case "replay": sim = Simulation.Replay(request.log); result = sim.Snapshot(); break;
+                    case "timeline": result = ObservationTimeline.Describe(sim.Observe()); break;
+                    case "preflight": result = ObservationTimeline.Preflight(sim.Observe(), request.zone); break;
+                    case "scenario_summary": result = new { label = ObservationTimeline.ScenarioLabel(request.scenario), summary = ObservationTimeline.ScenarioSummary(request.scenario) }; break;
                     default: throw new ArgumentException("Unknown operation");
                 }
                 Console.WriteLine(json.Serialize(result));

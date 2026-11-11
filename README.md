@@ -99,6 +99,8 @@ Browser tests default to installed Chrome; set `RG_BROWSER_CHANNEL=msedge` to us
 
 The client generates a small roofless 3D facility with storage stacks, conveyors, service lanes, zone heat markers and a command vehicle. C# owns the incident state, interaction, resource allocation, observation generation, HTTP advice calls and replay. It uses native Unity primitives and IMGUI, with no third-party art assets.
 
+An **observation-timestamp panel** lists, for each zone, what was last observed, at which tick, how old it is and where it came from, and marks each reading current, aged, stale or missing. Under each manual action it shows whether the evidence check would pass on the current observation. A **scenario control** selects the telemetry model and explains it, and the header shows the seed and scenario of the running incident. The panel reads observations only; its logic lives in `ObservationTimeline.cs`, which is tested through the headless C# host. The Unity drawing code has not yet run in Unity.
+
 On a machine with a licensed **Unity 6 LTS** Editor and Windows build support:
 
 1. Copy the source to a short path (for example `C:\src\RecycleGuard`). Open the `Unity` folder in Unity Hub. The project version is a compatibility baseline, not a locally validated Editor version; use an up-to-date Unity 6 LTS patch and record the exact version used.
@@ -108,7 +110,7 @@ On a machine with a licensed **Unity 6 LTS** Editor and Windows build support:
 5. Alternatively run `scripts/build-unity.ps1 -UnityEditor 'C:\path\to\Unity.exe'`.
 6. Run the produced player with `-rgSmoke`, inspect its screenshot, and perform the manual interaction checklist in `docs/VALIDATION.md`.
 
-`.github/workflows/unity-licensed-runner.yml` can do the compile/build on an already licensed Windows self-hosted runner. It deliberately does not provision licenses or claim an unexecuted cloud build. See [remote build instructions](docs/UNITY_BUILD.md).
+Two workflows can build the client without an Editor on your own machine. `.github/workflows/unity-gameci.yml` builds on a GitHub-hosted runner with your own Unity licence supplied as repository secrets, then runs the player's automated check. `.github/workflows/unity-licensed-runner.yml` does the same on an already licensed Windows self-hosted runner. Neither provisions a licence, and neither has completed a run yet. See [remote build instructions](docs/UNITY_BUILD.md).
 
 ## Optional real LLM
 
@@ -127,7 +129,7 @@ The model must already be available. Real-model runs fail explicitly on provider
 
 | Path | Responsibility |
 |---|---|
-| `Unity/Assets/Scripts/Core` | Authoritative deterministic C# model and replay |
+| `Unity/Assets/Scripts/Core` | Authoritative deterministic C# model and replay; observation-timestamp logic |
 | `Unity/Assets/Scripts/Runtime` | Native Unity scene, UI, operator loop and advice integration |
 | `Unity/Assets/Editor` | Scene creation, core checks and player build |
 | `headless` | C# JSON-line experiment host |

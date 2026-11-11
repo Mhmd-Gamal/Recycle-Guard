@@ -7,7 +7,8 @@ This inventory separates observed execution from supplied but unexecuted code. E
 | Layer | Evidence | Outcome |
 |---|---|---|
 | Shared C# core | `scripts/build-core.ps1` | Compiled successfully without Unity. |
-| Core, policy, API and provider adapter | `artifacts/test-results.xml` | 39 tests passed. Provider tests use a local HTTP stub, not a real LLM. |
+| Core, policy, API and provider adapter | `artifacts/test-results.xml` | 52 tests passed. Provider tests use a local HTTP stub, not a real LLM. |
+| Observation-timestamp panel logic | `tests/test_observation_timeline.py` (13 of the 52 tests) | `ObservationTimeline.cs` compiled into the headless host. Panel freshness agreed with the C# evidence check on every zone and tick; preflight matched the validator; rows showed lagged observations, never ground truth. |
 | Development evaluation | Seeds 1000-1029 | Used to discover/refine evidence-freshness behaviour; not treated as held-out. |
 | Final evaluation | `artifacts/heldout-evaluation/manifest.json`, `episodes.csv`, `traces.jsonl`, `summary.json` | 1,200 episodes; every completed episode replay-verified. |
 | Equal-state probes | `artifacts/heldout-evaluation/equal-state-probes.json` | 5,458 pairs; raw invalid 2,964; strict checked invalid 0. |
@@ -21,6 +22,7 @@ Initial browser packaging verification exposed a test timing race: the test read
 
 - Unity Editor import, C# compilation against Unity assemblies, actual scene rendering and player build.
 - Unity HTTP integration and standalone-player interaction.
+- The Unity side of the observation-timestamp panel and scenario control: IMGUI drawing, layout, zone selection from the panel, the extended `-rgSmoke` run and its screenshots. Only the shared logic behind the panel has been executed, outside Unity.
 - Any genuine LLM experiment; local stub HTTP tests establish adapter behaviour only.
 - Expert validation of scenario assumptions or action rules.
 - Human decision-quality, usability, workload, trust or calibration studies.
@@ -31,13 +33,14 @@ Initial browser packaging verification exposed a test timing race: the test read
 
 - Record Editor patch version, OS, hardware, source commit and clean import/build logs.
 - Create the incident scene; verify all four zones, labels, camera framing and resizing at 1280x720 and 1600x900.
-- Change seeds and all three scenarios; verify missing/stale observations are distinguishable.
+- Change seeds and all three scenarios with the scenario control; verify the header shows the running incident and marks a pending selection.
+- In the observation-timestamp panel, verify current, aged, stale and missing readings are distinguishable, that inspecting a zone refreshes its row, and that the preflight line under each manual action matches the outcome of applying it.
 - Select each zone and apply every manual action, including invalid resource/prerequisite cases.
 - Start the Python service; accept/reject/modify/request alternatives and inspect logs.
 - Stop the service and verify an explicit error while manual simulation remains available.
 - Verify stale advice cannot execute after the world changes.
 - Export and load a replay, scrub events, and verify the debrief/truth label.
-- Run the player with `-rgSmoke`; inspect `unity-smoke.json`, the screenshot and player log.
+- Run the player with `-rgSmoke`; inspect `unity-smoke.json`, the three per-scenario screenshots and the player log.
 - Record a genuine player walkthrough. Do not replace the browser provenance label until actual Unity footage exists.
 
 ## Interpretation discipline

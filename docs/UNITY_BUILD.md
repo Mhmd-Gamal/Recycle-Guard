@@ -5,7 +5,7 @@ The client has been built and run with Unity 6000.6.8f1 on one Windows 10 machin
 ## Local or remote machine with a licensed Editor
 
 1. Use a Windows x64 machine with an activated Unity 6 LTS Editor and Windows Mono build support. Licensing and cloud-machine costs are the owner's responsibility; this project does not bypass activation.
-2. Copy or clone this repository to a short path (the verified build used `C:g`); Unity fails on long project paths. Run `scripts/build-unity.ps1` with the exact Editor path. Set `RECYCLEGUARD_BUILD_DIR` to choose the output folder.
+2. Copy or clone this repository to a short path (the verified build used `C:\rg`); Unity fails on long project paths. Run `scripts/build-unity.ps1` with the exact Editor path. Set `RECYCLEGUARD_BUILD_DIR` to choose the output folder.
 3. Archive `unity-build.log`, the player directory, the exact Editor version, source commit and OS/GPU information.
 4. Start the Python service, launch the player, and follow the Unity checklist in `VALIDATION.md`.
 5. Capture real player footage and replace the browser-only submission evidence only after checking it.

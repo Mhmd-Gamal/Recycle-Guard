@@ -1,11 +1,11 @@
-# Building the Unity client on a remote machine
+# Building the Unity client
 
-There is no compiled Unity player in this release. C# compilation and browser testing do not establish Unity runtime compatibility. A licensed Editor must execute somewhere to produce genuine Unity evidence.
+The client has been built and run with Unity 6000.6.8f1 on one Windows 10 machine; `VALIDATION.md` lists exactly what was checked. No player binary is committed: build it with a licensed Editor, on your own machine or a remote one. The project was written against 6000.3.0f1 and upgraded cleanly, but only 6000.6.8f1 has been tried.
 
-## Existing licensed machine or cloud runner
+## Local or remote machine with a licensed Editor
 
 1. Use a Windows x64 machine with an activated Unity 6 LTS Editor and Windows Mono build support. Licensing and cloud-machine costs are the owner's responsibility; this project does not bypass activation.
-2. Copy or clone this repository to a short path. Run `scripts/build-unity.ps1` with the exact Editor path.
+2. Copy or clone this repository to a short path (the verified build used `C:g`); Unity fails on long project paths. Run `scripts/build-unity.ps1` with the exact Editor path. Set `RECYCLEGUARD_BUILD_DIR` to choose the output folder.
 3. Archive `unity-build.log`, the player directory, the exact Editor version, source commit and OS/GPU information.
 4. Start the Python service, launch the player, and follow the Unity checklist in `VALIDATION.md`.
 5. Capture real player footage and replace the browser-only submission evidence only after checking it.
@@ -30,7 +30,13 @@ The Editor version comes from `Unity/ProjectSettings/ProjectVersion.txt`; GameCI
 
 Output goes to the folder given by `-rgEvidenceDir <path>`, or to Unity's persistent data directory (normally `%USERPROFILE%\AppData\LocalLow\RecycleGuard Research\RecycleGuard`). `-rgScenario reliable|delayed|dropout` and `-rgSeed <number>` choose the incident the player starts with.
 
-The automated check does **not** replace interactive verification of HTTP advice, buttons, layout and replay scrubbing.
+The automated check does **not** replace looking at the result. On the first build it passed while every scene object rendered magenta; it now also fails when a zone or label material has no working shader, but layout and legibility still need a person.
+
+## Walkthrough, recording and click test
+
+- `-rgDemo` plays a captioned, paced walkthrough of the scenario control, the timestamp panel, a blocked action, inspection, live advice in checked and unchecked modes, dropout telemetry and replay. It calls the same methods as the buttons. Start the adviser service first, or the walkthrough shows the offline message instead of advice.
+- `-rgDemo -rgCaptureDir <path>` also saves every rendered frame as a PNG at 8 frames per second of walkthrough time. `python scripts/record-unity-demo.py --player <path to RecycleGuard.exe>` runs that, starts the adviser service if needed and encodes `artifacts/demo/RecycleGuard-unity-demo.webm`. Nothing from the desktop is captured.
+- `python tests/unity_clicks.py --player <path> --out <folder>` sends real mouse clicks to the player and saves a picture after each stage. It moves the mouse for about 20 seconds.
 
 ## References
 
@@ -39,4 +45,4 @@ The automated check does **not** replace interactive verification of HTTP advice
 - [Unity JsonUtility](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/JsonUtility.html)
 - [GameCI build and licensing options](https://game.ci/docs/github/builder/)
 
-Neither Unity workflow has completed a run yet, and no cloud resources have been purchased. Until one does, the Unity client remains uncompiled and unexecuted.
+Neither GitHub workflow has completed a run yet, and no cloud resources have been purchased. All Unity evidence so far comes from the local build described in `VALIDATION.md`.

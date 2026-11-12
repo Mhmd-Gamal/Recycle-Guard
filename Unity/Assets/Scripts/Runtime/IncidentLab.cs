@@ -392,10 +392,24 @@ public class IncidentLab : MonoBehaviour
             GUI.Label(new Rect(288, 600, 720, 82), caption, captionStyle);
         }
     }
+    // Saves every rendered frame as a PNG. With Time.captureFramerate set, game time advances by
+    // a fixed step per frame, so the saved sequence plays back at the walkthrough's intended pace.
+    private IEnumerator CaptureFrames(string folder)
+    {
+        Directory.CreateDirectory(folder);
+        for (int frame = 0; ; frame++)
+        {
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(folder, "frame-" + frame.ToString("D5") + ".png"));
+        }
+    }
     // -rgDemo: a paced, captioned walkthrough for recording. It calls the same methods as the
     // buttons, so the simulation, validator and adviser calls are real; only the clicking is scripted.
+    // -rgCaptureDir <folder> also saves the frames, at 8 per second of walkthrough time.
     private IEnumerator Demo()
     {
+        string captureDir = Argument(Environment.GetCommandLineArgs(), "-rgCaptureDir");
+        if (!string.IsNullOrEmpty(captureDir)) { Time.captureFramerate = 8; StartCoroutine(CaptureFrames(captureDir)); }
         scenarioIndex = 0; seedText = "42"; ResetIncident();
         caption = "RecycleGuard Unity player: scripted walkthrough. The C# simulation is deterministic and advances one tick only when the operator applies an action.";
         yield return new WaitForSeconds(7f);
@@ -430,7 +444,7 @@ public class IncidentLab : MonoBehaviour
             modeIndex = 1; yield return StartCoroutine(RequestAdvice(false));
             if (advice != null)
             {
-                caption = "Unchecked mode (offline_raw) skips the constraint check, so the fixture can propose actions the evidence does not support. Accepting it anyway...";
+                caption = "Unchecked mode (offline_raw) skips the constraint check, so its proposals are not filtered. Compare the proposal with the preflight line under that action, then accept.";
                 yield return new WaitForSeconds(8f);
                 Apply(advice.recommendation, "accept");
                 caption = "Result: \"" + message + "\". Whatever the adviser proposes, the simulation has the final say.";
@@ -448,6 +462,7 @@ public class IncidentLab : MonoBehaviour
         yield return new WaitForSeconds(3f);
         caption = "Limits: fictional training rules, not fire science. Offline fixtures, not an LLM. No expert review, no human study, not operational guidance.";
         yield return new WaitForSeconds(9f);
+        caption = ""; yield return null; yield return null;
         Application.Quit(0);
     }
     // One scenario of the automated player check. Returns an error description, or "" when it passes.

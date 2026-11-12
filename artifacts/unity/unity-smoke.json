@@ -1,0 +1,30 @@
+{
+    "passed": true,
+    "scope": "scene startup, working surface and label shaders, unsafe action rejection, replay, observation-timestamp panel in three telemetry scenarios, one screenshot per scenario",
+    "error": "",
+    "unityVersion": "6000.6.8f1",
+    "platform": "WindowsPlayer",
+    "graphicsDevice": "NVIDIA GeForce 920M",
+    "graphicsApi": "Direct3D11",
+    "screenWidth": 1280,
+    "screenHeight": 720,
+    "screenshots": [
+        "unity-smoke-reliable.png",
+        "unity-smoke-delayed.png",
+        "unity-smoke-dropout.png"
+    ],
+    "freshness": [
+        "reliable / Battery intake = current",
+        "reliable / Sorting hall = current",
+        "reliable / Materials store = current",
+        "reliable / Loading yard = current",
+        "delayed / Battery intake = stale",
+        "delayed / Sorting hall = stale",
+        "delayed / Materials store = stale",
+        "delayed / Loading yard = stale",
+        "dropout / Battery intake = aged",
+        "dropout / Sorting hall = aged",
+        "dropout / Materials store = missing",
+        "dropout / Loading yard = aged"
+    ]
+}

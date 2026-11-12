@@ -8,7 +8,7 @@ The operator workspace brings facility state, observation timestamps, recommenda
 
 Fictional setting: Northbank resource recovery facility. The operator must manage escalating heat, evacuate occupants, establish modelled isolation, and allocate limited crews and suppression resource under imperfect telemetry. The operator always decides whether to accept, reject, modify or replace advice.
 
-> **Release status:** the Windows browser demo, C# core, Python service, replay and offline experiments have been run and tested. The Unity client is supplied as source and has **not** been compiled or run in Unity. A licensed Editor on another machine or runner is still required. Offline proposal fixtures are **not LLMs**. This is a simplified research sandbox, not operational guidance or an FRV-validated system.
+> **Release status:** the Windows browser demo, C# core, Python service, replay and offline experiments have been run and tested. The Unity client has been built and run as a standalone Windows player with Unity 6000.6.8f1 on one machine; it is supplied as source, so building it needs a licensed Editor. Offline proposal fixtures are **not LLMs**. This is a simplified research sandbox, not operational guidance or an FRV-validated system.
 
 ## Try it without installing Unity or Python
 
@@ -16,7 +16,7 @@ Extract `dist/RecycleGuard-Windows.zip` to a short path on Windows 10/11 x64 and
 
 The portable executable includes Python, the service, the browser assets and the compiled C# core. Windows .NET Framework 4.x is required (normally present on Windows 10/11). **This executable is not a Unity player.**
 
-Watch [the recorded browser walkthrough](artifacts/demo/RecycleGuard-browser-demo.webm). It is browser footage, not Unity footage.
+Watch [the recorded browser walkthrough](artifacts/demo/RecycleGuard-browser-demo.webm) (browser footage) or [the Unity player walkthrough](artifacts/demo/RecycleGuard-unity-demo.webm) (frames rendered by the standalone Unity player, scripted and captioned).
 
 ## Source quick start (Windows)
 
@@ -99,18 +99,20 @@ Browser tests default to installed Chrome; set `RG_BROWSER_CHANNEL=msedge` to us
 
 The client generates a small roofless 3D facility with storage stacks, conveyors, service lanes, zone heat markers and a command vehicle. C# owns the incident state, interaction, resource allocation, observation generation, HTTP advice calls and replay. It uses native Unity primitives and IMGUI, with no third-party art assets.
 
-An **observation-timestamp panel** lists, for each zone, what was last observed, at which tick, how old it is and where it came from, and marks each reading current, aged, stale or missing. Under each manual action it shows whether the evidence check would pass on the current observation. A **scenario control** selects the telemetry model and explains it, and the header shows the seed and scenario of the running incident. The panel reads observations only; its logic lives in `ObservationTimeline.cs`, which is tested through the headless C# host. The Unity drawing code has not yet run in Unity.
+An **observation-timestamp panel** lists, for each zone, what was last observed, at which tick, how old it is and where it came from, and marks each reading current, aged, stale or missing. Under each manual action it shows whether the evidence check would pass on the current observation. A **scenario control** selects the telemetry model and explains it, and the header shows the seed and scenario of the running incident. The panel reads observations only; its logic lives in `ObservationTimeline.cs`, which is tested through the headless C# host.
+
+![Unity player with delayed telemetry: every reading is stale](artifacts/unity/unity-smoke-delayed.png)
 
 On a machine with a licensed **Unity 6 LTS** Editor and Windows build support:
 
-1. Copy the source to a short path (for example `C:\src\RecycleGuard`). Open the `Unity` folder in Unity Hub. The project version is a compatibility baseline, not a locally validated Editor version; use an up-to-date Unity 6 LTS patch and record the exact version used.
+1. Copy the source to a short path (for example `C:\src\RecycleGuard`). Open the `Unity` folder in Unity Hub. The project has been built and run with Unity 6000.6.8f1 only; record the exact version if you use another.
 2. Select **RecycleGuard > Create and open incident scene**.
 3. Start the Python adviser service and press Play. Manual simulation also works when the adviser is offline.
 4. Select **RecycleGuard > Verify C# core**, then **Build Windows demo**.
 5. Alternatively run `scripts/build-unity.ps1 -UnityEditor 'C:\path\to\Unity.exe'`.
-6. Run the produced player with `-rgSmoke`, inspect its screenshot, and perform the manual interaction checklist in `docs/VALIDATION.md`.
+6. Run the produced player with `-rgSmoke`, inspect its screenshots, and work through the open items of the checklist in `docs/VALIDATION.md`. `-rgDemo` plays the captioned walkthrough.
 
-Two workflows can build the client without an Editor on your own machine. `.github/workflows/unity-gameci.yml` builds on a GitHub-hosted runner with your own Unity licence supplied as repository secrets, then runs the player's automated check. `.github/workflows/unity-licensed-runner.yml` does the same on an already licensed Windows self-hosted runner. Neither provisions a licence, and neither has completed a run yet. See [remote build instructions](docs/UNITY_BUILD.md).
+Two workflows can build the client without an Editor on your own machine. `.github/workflows/unity-gameci.yml` builds on a GitHub-hosted runner with your own Unity licence supplied as repository secrets, then runs the player's automated check. `.github/workflows/unity-licensed-runner.yml` does the same on an already licensed Windows self-hosted runner. Neither provisions a licence, and neither has completed a run yet; the existing Unity evidence comes from a local build. See [build instructions](docs/UNITY_BUILD.md).
 
 ## Optional real LLM
 
